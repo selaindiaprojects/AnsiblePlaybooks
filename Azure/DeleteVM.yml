@@ -34,11 +34,10 @@
           state: absent
     - name: sleep for 2 minutes
       wait_for: timeout=200
-	  delegate_to: localhost
+      delegate_to: localhost
 
     - name: Remove a resource group
       azure_rm_resourcegroup:
           name: "{{ resource_group }}"
           location: "{{ location }}"
           state: absent
-                                      

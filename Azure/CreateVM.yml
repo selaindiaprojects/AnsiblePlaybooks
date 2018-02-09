@@ -34,7 +34,7 @@
         admin_password: Password@123
         capacity: 2
         virtual_network_name: "{{ vm_name }}"
-		subnet_name: "{{ vm_name }}"
+        subnet_name: "{{ vm_name }}"
         upgrade_policy: Manual
         tier: Standard
         managed_disk_type: Standard_LRS
@@ -44,4 +44,3 @@
           publisher: CoreOS
           sku: Stable
           version: latest
-		  
