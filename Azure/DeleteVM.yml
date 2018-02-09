@@ -1,0 +1,44 @@
+# This playbook deletes an Azure Virtual Machine
+# Change variables below to customize your VM deployment
+
+- hosts: localhost
+  connection: local
+  vars:
+    resource_group: demo
+    vm_name: testvmss
+    location: eastus
+  tasks:
+    - name: Remove VMSS
+      azure_rm_virtualmachine_scaleset:
+        resource_group: "{{ resource_group }}"
+        name: "{{ vm_name }}"
+        vm_size: Standard_DS1_v2
+        state: absent
+        remove_on_absent:
+          - network_interfaces
+          - virtual_storage
+
+    - name: Remove subnet
+      azure_rm_subnet:
+        resource_group: "{{ resource_group }}"
+        name: "{{ vm_name }}"
+        address_prefix: "10.0.1.0/24"
+        virtual_network: "{{ vm_name }}"
+        state: absent
+
+    - name: Remove virtual network
+      azure_rm_virtualnetwork:
+          resource_group: "{{ resource_group }}"
+          name: "{{ vm_name }}"
+          address_prefixes: "10.0.0.0/16"
+          state: absent
+    - name: sleep for 2 minutes
+      wait_for: timeout=200
+	  delegate_to: localhost
+
+    - name: Remove a resource group
+      azure_rm_resourcegroup:
+          name: "{{ resource_group }}"
+          location: "{{ location }}"
+          state: absent
+                                      
